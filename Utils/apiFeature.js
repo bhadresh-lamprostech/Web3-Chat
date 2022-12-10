@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import web3modal from 'web3modal';
 
-import { chatAppAddress, ChatAppABI } from "../Context/constants";
+import { chatAppAddress, chatAppABI } from "../Context/constants";
 
 //check wallet function
 export const ChechIfWalletConnected = async () => {
@@ -36,3 +36,32 @@ export const connectWallet = async () => {
 
 }
 
+//fetch contract
+const fetchContract = (signerOrProvider) => new ethers.Contract(chatAppABI, chatAppAddress, signerOrProvider)
+
+export const connectingWithWallet = async () => {
+
+    try {
+        const web3modal = new web3modal();
+        const connection = await web3modal.connect()
+        const provider = new ethers.providers.Web3Provider(connection)
+        const signer = provider.getSigner();
+        const contract = fetchContract(signer);
+        return contract;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+//convert time 
+
+export const  converTime  = (time) => {
+    const newTime = new Date(time.toNumber());
+    const realTime = newtime.getHours(); + "/" + newTime.getMinutes() + "/" + newTime.getSeconds() + 
+    " Date:" +
+    newTime.getDate() + "/" +
+    (newtime.getMont() + 1) + "/" +
+    newTime.getFullYear();
+
+}
